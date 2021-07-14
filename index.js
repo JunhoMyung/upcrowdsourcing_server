@@ -1,18 +1,23 @@
-const app = require('express')();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+require("dotenv").config();
+const app = require("express")();
+const http = require("http").createServer(app);
+const fs = require("fs");
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+const https = require("https").createServer(options, app);
+// const io = require("socket.io")(https, {
+//   cors: {
+//     origin: "*",
+//     methods: "*",
+//   },
+// });
+
+
+http.listen(process.env.HTTP_PORT, () => {
+  console.log(`listening on port ${process.env.HTTP_PORT}`);
 });
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-  });
-  socket.on('disconnect', () => {
-  console.log('user disconnected');
-  });
-});
-http.listen(5000, () => {
-  console.log('Connected at 5000');
+https.listen(process.env.HTTPS_PORT, () => {
+  console.log(`listening on port ${process.env.HTTPS_PORT}`);
 });
