@@ -3,8 +3,8 @@ const app = require("express")();
 const http = require("http").createServer(app);
 const fs = require("fs");
 const options = {
-    key: fs.readFileSync('privatekey.pem').toString(),
-    cert: fs.readFileSync('certificate.pem').toString()
+    key: fs.readFileSync('/etc/letsencrypt/live/up-kixlab.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/up-kixlab.com/fullchain.pem')
 };
 const https = require("https").createServer(options, app);
 const io = require("socket.io")(https, {
