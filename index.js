@@ -6,6 +6,9 @@ let io = require("socket.io")(http, {
     methods: "*",
   },
 });
+const connection = require("./router/connection");
+app.use("/connection", connection);
+
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
