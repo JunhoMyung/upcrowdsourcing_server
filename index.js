@@ -13,8 +13,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
   })
-  socket.on("try", (greeting, greeting2) => {
-    console.log("click")
+  socket.on("send", (Name, Msg /*Timestamp*/) => {
+    console.log("message received");
+    socket.emit("receiveMsg", Name, Msg);
   })
 });
 
