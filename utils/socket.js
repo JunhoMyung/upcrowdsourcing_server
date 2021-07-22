@@ -3,7 +3,6 @@ const utils = require("./utils");
 function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
-        console.log(Object.keys(roomInfo));
         var participantList = roomInfo[roomName];
         if (participantList.length < 4){
             console.log(`One person joined at ${roomName}`);
@@ -24,7 +23,7 @@ function joinResponse(roomInfo, io, socket){
     socket.join(newRoomName);
     socket.roomName = newRoomName;
     socket.playerName = playerName;
-    roomInfo[roomName] = [playerName];
+    roomInfo[newRoomName] = [playerName];
     socket.emit("name", playerName);
     io.to(newRoomName).emit("join", participantList);
 }
