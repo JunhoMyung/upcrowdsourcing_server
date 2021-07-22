@@ -3,7 +3,7 @@ const utils = require("./utils");
 function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
-        console.log(JSON.stringify(roomName));
+        console.log(Object.keys(roomInfo)[i]);
         var participantList = roomInfo[roomName];
         if (participantList.length < 4){
             console.log(`One person joined at ${roomName}`);
