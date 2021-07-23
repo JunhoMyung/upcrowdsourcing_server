@@ -58,6 +58,7 @@ function exitResponse(roomInfo, io, socket){
         }
         else if (roomInfo[socket.roomName]["progress"] == "task"){
             io.to(socket.roomName).emit("terminate");
+            delete roomInfo[socket.roomName]; 
         }
     }
 }
