@@ -15,6 +15,11 @@ let roomInfo = {}
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("disconnected");
+    socketHelper.exitResponse(
+      roomInfo,
+      io,
+      socket
+    )
   })
   socket.on("newMember", () => {
     socketHelper.joinResponse(
@@ -23,9 +28,9 @@ io.on("connection", (socket) => {
       socket
     )
   }) 
-  socket.on("send", (Name, Msg /*Timestamp*/) => {
+  socket.on("send", (Name, Msg) => {
     console.log("message received");
-    socket.emit("receiveMsg", Name, Msg);
+    socket.emit("receiveMsg", {name: Name, msg: Msg});
   })
 });
 

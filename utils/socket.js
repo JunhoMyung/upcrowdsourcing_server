@@ -3,7 +3,7 @@ const utils = require("./utils");
 function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
-        var participantList = roomInfo[roomName];
+        var participantList = roomInfo[roomName][participants];
         if (participantList.length < 4){
             console.log(`One person joined at ${roomName}`);
             const playerName = utils.newPlayerName(participantList);
@@ -11,9 +11,20 @@ function joinResponse(roomInfo, io, socket){
             socket.roomName = roomName;
             socket.playerName = playerName;
             participantList.push(playerName);
-            roomInfo[roomName] = participantList;
+            if (participantList.length == 4){
+                roomInfo[roomName] = {
+                    participants: participantList,
+                    progress: "task"
+                };
+            }
+            else {
+                roomInfo[roomName] = {
+                    participants: participantList,
+                    progress: "waiting"
+                };
+            }
             socket.emit("name", playerName);
-            io.to(roomName).emit("join", participantList);
+            io.to(roomName).emit("changeMember", participantList);
             return;
         }
     }
@@ -23,9 +34,28 @@ function joinResponse(roomInfo, io, socket){
     socket.join(newRoomName);
     socket.roomName = newRoomName;
     socket.playerName = playerName;
-    roomInfo[newRoomName] = [playerName];
+    roomInfo[newRoomName] = {
+        participants: [playerName],
+        progress: "waiting"
+    };
     socket.emit("name", playerName);
     io.to(newRoomName).emit("join", participantList);
 }
 
+function exitResponse(roomInfo, io, socket){
+    if (roomInfo[socket.roomName][progress] == "waiting"){
+        var tempList = roomInnfo[socket.roomName][participants]
+        const index = tempList.indexOf(socket.playerName);
+        if (index > -1) {
+            tempList.splice(index, 1);
+        }
+        roomInfo[socket.roomName][participants] = tempList
+        io.to(socket.roomName).emit("changeMember", tempList);
+    }
+    else if (roomInfo[socket.roomName][progress] == "task"){
+        io.to(socket.roomName).emit("terminate");
+    }
+}
+
 module.exports.joinResponse = joinResponse;
+module.exports.exitResponse = exitResponse;
