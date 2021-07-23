@@ -44,7 +44,7 @@ function joinResponse(roomInfo, io, socket){
 
 function exitResponse(roomInfo, io, socket){
     if (roomInfo[socket.roomName]["progress"] == "waiting"){
-        var tempList = roomInnfo[socket.roomName]["participants"]
+        var tempList = roomInfo[socket.roomName]["participants"]
         const index = tempList.indexOf(socket.playerName);
         if (index > -1) {
             tempList.splice(index, 1);
