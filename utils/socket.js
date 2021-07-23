@@ -39,7 +39,7 @@ function joinResponse(roomInfo, io, socket){
         progress: "waiting"
     };
     socket.emit("name", playerName);
-    io.to(newRoomName).emit("join", participantList);
+    io.to(newRoomName).emit("changeMember", participantList);
 }
 
 function exitResponse(roomInfo, io, socket){
