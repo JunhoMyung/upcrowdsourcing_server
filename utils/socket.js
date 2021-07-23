@@ -16,6 +16,7 @@ function joinResponse(roomInfo, io, socket){
                     participants: participantList,
                     progress: "task"
                 };
+                io.to(roomName).emit("full");
             }
             else {
                 roomInfo[roomName] = {
