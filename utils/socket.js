@@ -43,16 +43,16 @@ function joinResponse(roomInfo, io, socket){
 }
 
 function exitResponse(roomInfo, io, socket){
-    if (roomInfo[socket.roomName][progress] == "waiting"){
-        var tempList = roomInnfo[socket.roomName][participants]
+    if (roomInfo[socket.roomName]["progress"] == "waiting"){
+        var tempList = roomInnfo[socket.roomName]["participants"]
         const index = tempList.indexOf(socket.playerName);
         if (index > -1) {
             tempList.splice(index, 1);
         }
-        roomInfo[socket.roomName][participants] = tempList
+        roomInfo[socket.roomName]["participants"] = tempList
         io.to(socket.roomName).emit("changeMember", tempList);
     }
-    else if (roomInfo[socket.roomName][progress] == "task"){
+    else if (roomInfo[socket.roomName]["progress"] == "task"){
         io.to(socket.roomName).emit("terminate");
     }
 }
