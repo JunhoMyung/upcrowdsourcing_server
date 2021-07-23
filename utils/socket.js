@@ -3,7 +3,7 @@ const utils = require("./utils");
 function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
-        var participantList = roomInfo[roomName][participants];
+        var participantList = roomInfo[roomName]["participants"];
         if (participantList.length < 4){
             console.log(`One person joined at ${roomName}`);
             const playerName = utils.newPlayerName(participantList);
@@ -45,19 +45,21 @@ function joinResponse(roomInfo, io, socket){
 function exitResponse(roomInfo, io, socket){
     console.log(socket.roomName)
     console.log(roomInfo)
-    // if (roomInfo[socket.roomName]["progress"] == "waiting"){
-    //     var tempList = roomInfo[socket.roomName]["participants"]
-    //     const index = tempList.indexOf(socket.playerName);
-    //     if (index > -1) {
-    //         tempList.splice(index, 1);
-    //     }
-    //     roomInfo[socket.roomName]["participants"] = tempList;
-    //     io.to(socket.roomName).emit("changeMember", tempList);
-    //     console.log(roomInfo);
-    // }
-    // else if (roomInfo[socket.roomName]["progress"] == "task"){
-    //     io.to(socket.roomName).emit("terminate");
-    // }
+    if (socket.roomName){
+        if (roomInfo[socket.roomName]["progress"] == "waiting"){
+            var tempList = roomInfo[socket.roomName]["participants"]
+            const index = tempList.indexOf(socket.playerName);
+            if (index > -1) {
+                tempList.splice(index, 1);
+            }
+            roomInfo[socket.roomName]["participants"] = tempList;
+            io.to(socket.roomName).emit("changeMember", tempList);
+            console.log(roomInfo);
+        }
+        else if (roomInfo[socket.roomName]["progress"] == "task"){
+            io.to(socket.roomName).emit("terminate");
+        }
+    }
 }
 
 module.exports.joinResponse = joinResponse;
