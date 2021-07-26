@@ -47,19 +47,21 @@ function exitResponse(roomInfo, io, socket){
     console.log(socket.roomName)
     console.log(roomInfo)
     if (socket.roomName){
-        if (roomInfo[socket.roomName]["progress"] == "waiting"){
-            var tempList = roomInfo[socket.roomName]["participants"]
-            const index = tempList.indexOf(socket.playerName);
-            if (index > -1) {
-                tempList.splice(index, 1);
+        if(roomInfo[socket.roomName]){
+            if (roomInfo[socket.roomName]["progress"] == "waiting"){
+                var tempList = roomInfo[socket.roomName]["participants"]
+                const index = tempList.indexOf(socket.playerName);
+                if (index > -1) {
+                    tempList.splice(index, 1);
+                }
+                roomInfo[socket.roomName]["participants"] = tempList;
+                io.to(socket.roomName).emit("changeMember", tempList);
+                console.log(roomInfo);
             }
-            roomInfo[socket.roomName]["participants"] = tempList;
-            io.to(socket.roomName).emit("changeMember", tempList);
-            console.log(roomInfo);
-        }
-        else if (roomInfo[socket.roomName]["progress"] == "task"){
-            io.to(socket.roomName).emit("terminate");
-            delete roomInfo[socket.roomName]; 
+            else if (roomInfo[socket.roomName]["progress"] == "task"){
+                io.to(socket.roomName).emit("terminate");
+                delete roomInfo[socket.roomName]; 
+            }
         }
     }
 }
