@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
   }) 
   socket.on("send", (Name, Msg) => {
     console.log("message received");
-    socket.emit("receiveMsg", {name: Name, msg: Msg});
+    io.to(socket.roomName).emit("receiveMsg", {name: Name, msg: Msg});
   })
 });
 
