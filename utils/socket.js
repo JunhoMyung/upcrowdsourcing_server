@@ -69,7 +69,7 @@ function exitResponse(roomInfo, io, socket){
     }
 }
 function acceptResponse(roomInfo, io, socket) {
-    if(roomInfo[socket.roomName]["accept"]){
+    if(roomInfo[socket.roomName]){
         var temp = roomInfo[socket.roomName]["accept"];
         roomInfo[socket.roomName]["accept"] = temp + 1;
         if ((temp + 1) === 4){
