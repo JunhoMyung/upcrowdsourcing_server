@@ -66,12 +66,16 @@ function acceptResponse(roomInfo, io, socket) {
 }
 function readyResponse(roomInfo, io, socket) {
     if(roomInfo[socket.roomName]){
-        var temp = roomInfo[socket.roomName]["ready"];
-        roomInfo[socket.roomName]["ready"] = temp + 1;
-        if ((temp + 1) == 4){
-            io.to(socket.roomName).emit("full");
+        if (!socket.ready){
+            var temp = roomInfo[socket.roomName]["ready"];
+            roomInfo[socket.roomName]["ready"] = temp + 1;
+            socket.ready = true;
+            if ((temp + 1) == 4){
+                io.to(socket.roomName).emit("full");
+                roomInfo[socket.roomName]["progress"] = "task";
+            }
+            io.to(socket.roomName).emit("newMember", temp+1);
         }
-        io.to(socket.roomName).emit("newMember", temp+1);
     }
 }
     
