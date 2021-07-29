@@ -53,6 +53,23 @@ io.on("connection", (socket) => {
       socket
     )
   })
+  socket.on("AnswerInt", (answer, num) => {
+    if(num == 0){
+      io.to(socket.roomName).emit("AnswerInt", num, answer, 85)
+    }
+    else if (num == 1){
+      io.to(socket.roomName).emit("AnswerInt", num, answer, 13)
+    }
+    else if (num == 2){
+      io.to(socket.roomName).emit("AnswerInt", num, answer, 21)
+    }
+    else if (num == 3){
+      io.to(socket.roomName).emit("AnswerInt", num, answer, 277)
+    }
+    else if (num == 4){
+      io.to(socket.roomName).emit("AnswerInt", num, answer, 121)
+    }
+  })
 });
 
 http.listen(8080, () => {
