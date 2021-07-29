@@ -69,12 +69,15 @@ function exitResponse(roomInfo, io, socket){
     }
 }
 function acceptResponse(roomInfo, io, socket) {
-    var temp = roomInfo[socket.roomName]["accept"];
-    roomInfo[socket.roomName]["accept"] = temp + 1;
-    if ((temp + 1) === 4){
-        io.to(socket.roomName).emit("allAccept");
+    if(roomInfo[socket.roomName]["accept"]){
+        var temp = roomInfo[socket.roomName]["accept"];
+        roomInfo[socket.roomName]["accept"] = temp + 1;
+        if ((temp + 1) === 4){
+            io.to(socket.roomName).emit("allAccept");
+        }
     }
 }
+    
 
 module.exports.joinResponse = joinResponse;
 module.exports.exitResponse = exitResponse;
