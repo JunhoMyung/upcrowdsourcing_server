@@ -39,6 +39,13 @@ io.on("connection", (socket) => {
       socket
     )
   })
+  socket.on("ready", () => {
+    socketHelper.readyResponse(
+      roomInfo,
+      io,
+      socket
+    )
+  })
 });
 
 http.listen(8080, () => {

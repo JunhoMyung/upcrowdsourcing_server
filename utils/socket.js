@@ -11,21 +11,7 @@ function joinResponse(roomInfo, io, socket){
             socket.roomName = roomName;
             socket.playerName = playerName;
             participantList.push(playerName);
-            if (participantList.length == 4){
-                roomInfo[roomName] = {
-                    participants: participantList,
-                    progress: "task",
-                    accept: 0
-                };
-                io.to(roomName).emit("full");
-            }
-            else {
-                roomInfo[roomName] = {
-                    participants: participantList,
-                    progress: "waiting",
-                    accept: 0
-                };
-            }
+            roomInfo[roomName]["participants"] = participantList
             socket.emit("name", playerName);
             io.to(roomName).emit("changeMember", participantList);
             return;
@@ -40,6 +26,7 @@ function joinResponse(roomInfo, io, socket){
     roomInfo[newRoomName] = {
         participants: [playerName],
         progress: "waiting",
+        ready: 0,
         accept: 0
     };
     socket.emit("name", playerName);
@@ -72,9 +59,18 @@ function acceptResponse(roomInfo, io, socket) {
     if(roomInfo[socket.roomName]){
         var temp = roomInfo[socket.roomName]["accept"];
         roomInfo[socket.roomName]["accept"] = temp + 1;
-        if ((temp + 1) === 4){
+        if ((temp + 1) == 4){
             var task = Math.floor(Math.random() * 2)
             io.to(socket.roomName).emit("allAccept", task);
+        }
+    }
+}
+function readyResponse(roomInfo, io, socket) {
+    if(roomInfo[socket.roomName]){
+        var temp = roomInfo[socket.roomName]["ready"];
+        roomInfo[socket.roomName]["ready"] = temp + 1;
+        if ((temp + 1) == 4){
+            io.to(socket.roomName).emit("full");
         }
     }
 }
@@ -83,3 +79,4 @@ function acceptResponse(roomInfo, io, socket) {
 module.exports.joinResponse = joinResponse;
 module.exports.exitResponse = exitResponse;
 module.exports.acceptResponse = acceptResponse;
+module.exports.readyResponse = readyResponse;
