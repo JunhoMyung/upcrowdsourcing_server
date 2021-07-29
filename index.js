@@ -55,6 +55,7 @@ io.on("connection", (socket) => {
   })
   socket.on("AnswerInt", (answer, num) => {
     if(num == 0){
+      console.log((answer,num));
       io.to(socket.roomName).emit("AnswerInt", num, answer, 85)
     }
     else if (num == 1){
