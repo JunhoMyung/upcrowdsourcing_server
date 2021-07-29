@@ -44,6 +44,7 @@ function exitResponse(roomInfo, io, socket){
                 }
                 roomInfo[socket.roomName]["participants"] = tempList;
                 roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
+                io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
                 console.log(roomInfo);
             }
             else if (roomInfo[socket.roomName]["progress"] == "task"){
