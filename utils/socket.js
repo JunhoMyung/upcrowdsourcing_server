@@ -43,6 +43,7 @@ function exitResponse(roomInfo, io, socket){
                     tempList.splice(index, 1);
                 }
                 roomInfo[socket.roomName]["participants"] = tempList;
+                roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
                 console.log(roomInfo);
             }
             else if (roomInfo[socket.roomName]["progress"] == "task"){
