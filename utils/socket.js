@@ -73,7 +73,8 @@ function acceptResponse(roomInfo, io, socket) {
         var temp = roomInfo[socket.roomName]["accept"];
         roomInfo[socket.roomName]["accept"] = temp + 1;
         if ((temp + 1) === 4){
-            io.to(socket.roomName).emit("allAccept");
+            var task = Math.floor(Math.random() * 2)
+            io.to(socket.roomName).emit("allAccept", task);
         }
     }
 }
