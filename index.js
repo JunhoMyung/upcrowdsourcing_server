@@ -46,6 +46,13 @@ io.on("connection", (socket) => {
       socket
     )
   })
+  socket.on("Intel-Instruction", () => {
+    socketHelper.intel_instruction(
+      roomInfo,
+      io,
+      socket
+    )
+  })
 });
 
 http.listen(8080, () => {

@@ -26,7 +26,8 @@ function joinResponse(roomInfo, io, socket){
         participants: [playerName],
         progress: "waiting",
         ready: 0,
-        accept: 0
+        accept: 0,
+        intel_instruction: 0,
     };
     socket.emit("name", playerName);
 }
@@ -79,9 +80,20 @@ function readyResponse(roomInfo, io, socket) {
         }
     }
 }
+function intel_instruction(roomInfo, io, socket) {
+    if(roomInfo[socket.roomName]){
+        var temp = roomInfo[socket.roomName]["intel_instruction"];
+        roomInfo[socket.roomName]["intel_instruction"] = temp + 1;
+        if ((temp + 1) == 4){
+            io.to(socket.roomName).emit("Intel-Instruction-Done");
+        }
+        io.to(socket.roomName).emit("Intel-Instruction", temp+1); 
+    }
+}
     
 
 module.exports.joinResponse = joinResponse;
 module.exports.exitResponse = exitResponse;
 module.exports.acceptResponse = acceptResponse;
 module.exports.readyResponse = readyResponse;
+module.exports.intel_instruction = intel_instruction;
