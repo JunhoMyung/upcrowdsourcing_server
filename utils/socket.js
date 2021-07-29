@@ -14,14 +14,16 @@ function joinResponse(roomInfo, io, socket){
             if (participantList.length == 4){
                 roomInfo[roomName] = {
                     participants: participantList,
-                    progress: "task"
+                    progress: "task",
+                    accept: 0
                 };
                 io.to(roomName).emit("full");
             }
             else {
                 roomInfo[roomName] = {
                     participants: participantList,
-                    progress: "waiting"
+                    progress: "waiting",
+                    accept: 0
                 };
             }
             socket.emit("name", playerName);
@@ -37,7 +39,8 @@ function joinResponse(roomInfo, io, socket){
     socket.playerName = playerName;
     roomInfo[newRoomName] = {
         participants: [playerName],
-        progress: "waiting"
+        progress: "waiting",
+        accept: 0
     };
     socket.emit("name", playerName);
     io.to(newRoomName).emit("changeMember", [playerName]);
@@ -65,6 +68,14 @@ function exitResponse(roomInfo, io, socket){
         }
     }
 }
+function acceptResponse(roomInfo, io, socket) {
+    var temp = roomInfo[socket.roomName]["accept"];
+    roomInfo[socket.roomName]["accept"] = temp + 1;
+    if ((temp + 1) === 4){
+        io.to(socket.roomName).emit("allAccept");
+    }
+}
 
 module.exports.joinResponse = joinResponse;
 module.exports.exitResponse = exitResponse;
+module.exports.acceptResponse = acceptResponse;

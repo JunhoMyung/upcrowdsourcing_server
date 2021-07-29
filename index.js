@@ -32,6 +32,13 @@ io.on("connection", (socket) => {
     console.log("message received");
     io.to(socket.roomName).emit("receiveMsg", {name: Name, msg: Msg});
   })
+  socket.on("accept", () => {
+    socketHelper.acceptResponse(
+      roomInfo,
+      io,
+      socket
+    )
+  })
 });
 
 http.listen(8080, () => {
