@@ -63,6 +63,12 @@ io.on("connection", (socket) => {
   socket.on("AnswerInt", (answer) => {
     io.to(socket.roomName).emit("AnswerInt", answer)
   })
+  socket.on("submitTitle", (title) => {
+    io.to(socket.roomName).emit("adtitle", title)
+  })
+  socket.on("submitDescription", (temp) => {
+    io.to(socket.roomName).emit("addescription", temp)
+  })
 });
 
 http.listen(8080, () => {
