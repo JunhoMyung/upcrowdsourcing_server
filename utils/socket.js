@@ -28,6 +28,7 @@ function joinResponse(roomInfo, io, socket){
         ready: 0,
         accept: 0,
         intel_instruction: 0,
+        creative_instruction: 0,
     };
     socket.emit("name", playerName);
 }
@@ -90,6 +91,16 @@ function intel_instruction(roomInfo, io, socket) {
         io.to(socket.roomName).emit("Intel-Instruction", temp+1); 
     }
 }
+function creative_instruction(roomInfo, io, socket) {
+    if(roomInfo[socket.roomName]){
+        var temp = roomInfo[socket.roomName]["creative_instruction"];
+        roomInfo[socket.roomName]["creative_instruction"] = temp + 1;
+        if ((temp + 1) == 4){
+            io.to(socket.roomName).emit("Creative-Instruction-Done");
+        }
+        io.to(socket.roomName).emit("Creative-Instruction", temp+1); 
+    }
+}
     
 
 module.exports.joinResponse = joinResponse;
@@ -97,3 +108,4 @@ module.exports.exitResponse = exitResponse;
 module.exports.acceptResponse = acceptResponse;
 module.exports.readyResponse = readyResponse;
 module.exports.intel_instruction = intel_instruction;
+module.exports.creative_instruction = creative_instruction;

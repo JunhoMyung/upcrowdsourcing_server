@@ -53,6 +53,13 @@ io.on("connection", (socket) => {
       socket
     )
   })
+  socket.on("Creative-Instruction", () => {
+    socketHelper.creative_instruction(
+      roomInfo,
+      io,
+      socket
+    )
+  })
   socket.on("AnswerInt", (answer) => {
     io.to(socket.roomName).emit("AnswerInt", answer)
   })
