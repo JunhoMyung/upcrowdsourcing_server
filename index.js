@@ -28,9 +28,9 @@ io.on("connection", (socket) => {
       socket
     )
   }) 
-  socket.on("send", (Name, Msg) => {
+  socket.on("send", (Name, Msg, Time) => {
     console.log("message received");
-    io.to(socket.roomName).emit("receiveMsg", {name: Name, msg: Msg});
+    io.to(socket.roomName).emit("receiveMsg", {name: Name, msg: Msg, time: Time});
   })
   socket.on("accept", () => {
     socketHelper.acceptResponse(
