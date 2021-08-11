@@ -72,6 +72,9 @@ io.on("connection", (socket) => {
   socket.on("finish", () => {
     io.to(socket.roomName).emit("finish")
   })
+  socket.on("reaction", (emoji, name, num) => {
+    io.to(socket.roomName).emit("reaction", emoji, name, num)
+  })
 });
 
 http.listen(8080, () => {
