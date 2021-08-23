@@ -62,8 +62,7 @@ function acceptResponse(roomInfo, io, socket) {
         roomInfo[socket.roomName]["accept"] = temp + 1;
         io.to(socket.roomName).emit("accept", temp+1);
         if ((temp + 1) == 4){
-            var task = Math.floor(Math.random() * 2)
-            io.to(socket.roomName).emit("allAccept", task);
+            io.to(socket.roomName).emit("allAccept");
         }
     }
 }
@@ -79,16 +78,6 @@ function readyResponse(roomInfo, io, socket) {
             }
             io.to(socket.roomName).emit("newMember", temp+1);
         }
-    }
-}
-function intel_instruction(roomInfo, io, socket) {
-    if(roomInfo[socket.roomName]){
-        var temp = roomInfo[socket.roomName]["intel_instruction"];
-        roomInfo[socket.roomName]["intel_instruction"] = temp + 1;
-        if ((temp + 1) == 4){
-            io.to(socket.roomName).emit("Intel-Instruction-Done");
-        }
-        io.to(socket.roomName).emit("Intel-Instruction", temp+1); 
     }
 }
 function creative_instruction(roomInfo, io, socket) {
@@ -107,5 +96,4 @@ module.exports.joinResponse = joinResponse;
 module.exports.exitResponse = exitResponse;
 module.exports.acceptResponse = acceptResponse;
 module.exports.readyResponse = readyResponse;
-module.exports.intel_instruction = intel_instruction;
 module.exports.creative_instruction = creative_instruction;

@@ -46,22 +46,12 @@ io.on("connection", (socket) => {
       socket
     )
   })
-  socket.on("Intel-Instruction", () => {
-    socketHelper.intel_instruction(
-      roomInfo,
-      io,
-      socket
-    )
-  })
   socket.on("Creative-Instruction", () => {
     socketHelper.creative_instruction(
       roomInfo,
       io,
       socket
     )
-  })
-  socket.on("AnswerInt", (answer) => {
-    io.to(socket.roomName).emit("AnswerInt", answer)
   })
   socket.on("submitTitle", (title) => {
     io.to(socket.roomName).emit("adtitle", title)
