@@ -76,6 +76,7 @@ io.on("connection", (socket) => {
         roomInfo[temp]["participants"] = tempList;
       }
       roomInfo[temp]["ready"] = roomInfo[temp]["ready"] - 1;
+      roomInfo[temp]["accept"] = 0;
       socket.leave(temp)
       io.to(temp).emit("newMember", roomInfo[temp]["ready"]);
     }
