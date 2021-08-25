@@ -73,10 +73,8 @@ io.on("connection", (socket) => {
         tempList.splice(index, 1);
     }
     roomInfo[socket.roomName]["participants"] = tempList;
-    if(socket.ready){
-        roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
-        io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
-    }
+    roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
+    io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
     socket.leave(socket.roomName)
   })
 });
