@@ -66,6 +66,19 @@ io.on("connection", (socket) => {
   socket.on("reaction", (emoji, name, num) => {
     io.to(socket.roomName).emit("reaction", emoji, name, num)
   })
+  socket.on("refuse", () => {
+    var tempList = roomInfo[socket.roomName]["participants"]
+    const index = tempList.indexOf(socket.playerName);
+    if (index > -1) {
+        tempList.splice(index, 1);
+    }
+    roomInfo[socket.roomName]["participants"] = tempList;
+    if(socket.ready){
+        roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
+        io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
+    }
+    socket.leave(socket.roomName)
+  })
 });
 
 http.listen(8080, () => {
