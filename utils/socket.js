@@ -54,14 +54,6 @@ function exitResponse(roomInfo, io, socket){
                 io.to(socket.roomName).emit("terminate");
                 delete roomInfo[socket.roomName]; 
             }
-            else if (roomInfo[socket.roomName]["progress"] == "ready"){
-                io.to(socket.roomName).emit("terminate");
-                delete roomInfo[socket.roomName]; 
-            }
-            else if (roomInfo[socket.roomName]["progress"] == "accept"){
-                io.to(socket.roomName).emit("terminate");
-                delete roomInfo[socket.roomName]; 
-            }
             else if (roomInfo[socket.roomName]["progress"] == "survey"){
                 var tempList = roomInfo[socket.roomName]["participants"]
                 const index = tempList.indexOf(socket.playerName);
@@ -97,7 +89,6 @@ function readyResponse(roomInfo, io, socket) {
             socket.ready = true;
             if ((temp + 1) == 4){
                 io.to(socket.roomName).emit("full");
-                roomInfo[socket.roomName]["progress"] = "accept";
             }
             io.to(socket.roomName).emit("newMember", temp+1);
         }
