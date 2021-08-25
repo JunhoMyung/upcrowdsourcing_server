@@ -67,15 +67,34 @@ io.on("connection", (socket) => {
     io.to(socket.roomName).emit("reaction", emoji, name, num)
   })
   socket.on("refuse", () => {
-    var tempList = roomInfo[socket.roomName]["participants"]
-    const index = tempList.indexOf(socket.playerName);
-    if (index > -1) {
-      tempList.splice(index, 1);
-      roomInfo[socket.roomName]["participants"] = tempList;
-      roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
-      io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
-      socket.leave(socket.roomName)
+    if (socket.roomName != null){
+      const temp = socket.roomName
+      var tempList = roomInfo[temp]["participants"]
+      const index = tempList.indexOf(socket.playerName);
+      if (index > -1) {
+        tempList.splice(index, 1);
+        roomInfo[temp]["participants"] = tempList;
+      }
+      roomInfo[temp]["ready"] = roomInfo[temp]["ready"] - 1;
+      socket.leave(temp)
+      io.to(temp).emit("newMember", roomInfo[temp]["ready"]);
     }
+    socket.roomName = null;
+  })
+  socket.on("end-waiting", () => {
+    if (socket.roomName != null){
+      const temp = socket.roomName
+      var tempList = roomInfo[temp]["participants"]
+      const index = tempList.indexOf(socket.playerName);
+      if (index > -1) {
+        tempList.splice(index, 1);
+        roomInfo[temp]["participants"] = tempList;
+      }
+      roomInfo[temp]["ready"] = roomInfo[temp]["ready"] - 1;
+      socket.leave(temp)
+      io.to(temp).emit("newMember", roomInfo[temp]["ready"]);
+    }
+    socket.roomName = null;
   })
 });
 
