@@ -4,7 +4,7 @@ function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
         var participantList = roomInfo[roomName]["participants"];
-        if (participantList.length < 4 && roomInfo[roomName]["progress"] === "waiting"){
+        if (participantList.length < 4 && roomInfo[roomName]["progress"] == "waiting"){
             console.log(`One person joined at ${roomName}`);
             const playerName = utils.newPlayerName(participantList);
             socket.join(roomName);
