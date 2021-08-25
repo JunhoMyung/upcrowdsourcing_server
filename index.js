@@ -13,7 +13,7 @@ app.use("/connection", connection);
 let roomInfo = {}
 
 io.on("connection", (socket) => {
-  socket.on("actual_disconnect", () => {
+  socket.on("disconnect", () => {
     console.log("disconnected");
     socketHelper.exitResponse(
       roomInfo,
