@@ -70,12 +70,12 @@ io.on("connection", (socket) => {
     var tempList = roomInfo[socket.roomName]["participants"]
     const index = tempList.indexOf(socket.playerName);
     if (index > -1) {
-        tempList.splice(index, 1);
+      tempList.splice(index, 1);
+      roomInfo[socket.roomName]["participants"] = tempList;
+      roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
+      io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
+      socket.leave(socket.roomName)
     }
-    roomInfo[socket.roomName]["participants"] = tempList;
-    roomInfo[socket.roomName]["ready"] = roomInfo[socket.roomName]["ready"] - 1;
-    io.to(socket.roomName).emit("newMember", roomInfo[socket.roomName]["ready"]);
-    socket.leave(socket.roomName)
   })
 });
 
