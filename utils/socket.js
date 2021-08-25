@@ -12,7 +12,7 @@ function joinResponse(roomInfo, io, socket){
             socket.playerName = playerName;
             participantList.push(playerName);
             roomInfo[roomName]["participants"] = participantList
-            socket.emit("name", playerName);
+            socket.emit("name", playerName, roomName);
             return;
         }
     }
@@ -30,7 +30,7 @@ function joinResponse(roomInfo, io, socket){
         intel_instruction: 0,
         creative_instruction: 0,
     };
-    socket.emit("name", playerName);
+    socket.emit("name", playerName, newRoomName);
 }
 
 function exitResponse(roomInfo, io, socket){
