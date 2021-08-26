@@ -1,6 +1,23 @@
+require("dotenv").config();
 const app = require("express")();
 const http = require("http").createServer(app);
 let io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+    methods: "*",
+  },
+});
+const fs = require("fs");
+const options = {
+  key: fs.readFileSync(
+    "/etc/letsencrypt/live/up-kixlabserver.us/privkey.pem"
+  ),
+  cert: fs.readFileSync(
+    "/etc/letsencrypt/live/up-kixlabserver.us/fullchain.pem"
+  ),
+};
+const https = require("https").createServer(options, app);
+const io = require("socket.io")(https, {
   cors: {
     origin: "*",
     methods: "*",
@@ -140,6 +157,9 @@ io.on("connection", (socket) => {
   })
 });
 
-http.listen(8080, () => {
-  console.log(`listening on port 8080`);
+http.listen(process.env.HTTP_PORT, () => {
+  console.log(`listening on port ${process.env.HTTP_PORT}`);
+});
+https.listen(process.env.HTTPS_PORT, () => {
+  console.log(`listening on port ${process.env.HTTPS_PORT}`);
 });
