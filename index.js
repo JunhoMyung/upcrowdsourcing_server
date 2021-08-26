@@ -1,12 +1,6 @@
 require("dotenv").config();
 const app = require("express")();
 const http = require("http").createServer(app);
-let io = require("socket.io")(http, {
-  cors: {
-    origin: "*",
-    methods: "*",
-  },
-});
 const fs = require("fs");
 const options = {
   key: fs.readFileSync(
