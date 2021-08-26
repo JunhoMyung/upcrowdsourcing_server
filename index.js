@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
     )
   }) 
   socket.on("send", (Name, Msg, Time, Reply) => {
-    console.log("message received");
     io.to(socket.roomName).emit("receiveMsg", {name: Name, msg: Msg, time: Time, reply: Reply});
   })
   socket.on("accept", () => {
@@ -68,6 +67,7 @@ io.on("connection", (socket) => {
   })
   socket.on("finish", (title, description) => {
     if (roomInfo[socket.roomName]["progress"] == "survey"){
+      console.log(title,description)
       io.to(socket.roomName).emit("finish", title, description)
       roomInfo[socket.roomName]["progress"] = "survey";
     }
@@ -77,15 +77,21 @@ io.on("connection", (socket) => {
   })
   socket.on("agree", (player) => {
     io.to(socket.roomName).emit("agree", player)
-    const temp = roomInfo[socket.roomName]["agree"]
-    roomInfo[socket.roomName]["agree"] = temp + 1
-    if (temp + 1 == 3) {
-      io.to(socket.roomName).emit("finish", roomInfo[socket.roomName]["title"], roomInfo[socket.roomName]["description"])
-      roomInfo[socket.roomName]["progress"] = "survey";
+    if (roomInfo[socket.roomName]["agree"]){
+      const temp = roomInfo[socket.roomName]["agree"]
+      roomInfo[socket.roomName]["agree"] = temp + 1
+      if (temp + 1 == 3) {
+        io.to(socket.roomName).emit("finish", roomInfo[socket.roomName]["title"], roomInfo[socket.roomName]["description"])
+        roomInfo[socket.roomName]["progress"] = "survey";
+      }
+      else if((temp + 1 + roomInfo[socket.roomName]["disagree"]) == 4){
+        io.to(socket.roomName).emit("nonagreement")
+      }
     }
-    else if((temp + 1 + roomInfo[socket.roomName]["disagree"]) == 4){
-      io.to(socket.roomName).emit("nonagreement")
+    else{
+      roomInfo[socket.roomName]["agree"] = 1
     }
+    
   })
   socket.on("disagree", (player) => {
     io.to(socket.roomName).emit("disagree", player)
