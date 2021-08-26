@@ -59,14 +59,18 @@ io.on("connection", (socket) => {
   socket.on("submitDescription", (temp) => {
     io.to(socket.roomName).emit("addescription", temp)
   })
-  socket.on("confirmation", (playerName) => {
+  socket.on("confirmation", (playerName, title, description) => {
     io.to(socket.roomName).emit("confirmation", playerName)
-    roomInfo[socket.roomName]["agree"] = 0
-    roomInfo[socket.roomName]["disagree"] = 0
+    roomInfo[socket.roomName]["title"] = title;
+    roomInfo[socket.roomName]["description"] = description;
+    roomInfo[socket.roomName]["agree"] = 0;
+    roomInfo[socket.roomName]["disagree"] = 0;
   })
-  socket.on("finish", () => {
-    io.to(socket.roomName).emit("finish")
-    roomInfo[socket.roomName]["progress"] = "survey";
+  socket.on("finish", (title, description) => {
+    if (roomInfo[socket.roomName]["progress"] == "survey"){
+      io.to(socket.roomName).emit("finish", title, description)
+      roomInfo[socket.roomName]["progress"] = "survey";
+    }
   })
   socket.on("reaction", (emoji, name, num) => {
     io.to(socket.roomName).emit("reaction", emoji, name, num)
@@ -76,7 +80,7 @@ io.on("connection", (socket) => {
     const temp = roomInfo[socket.roomName]["agree"]
     roomInfo[socket.roomName]["agree"] = temp + 1
     if (temp + 1 == 3) {
-      io.to(socket.roomName).emit("finish")
+      io.to(socket.roomName).emit("finish", roomInfo[socket.roomName]["title"], roomInfo[socket.roomName]["description"])
       roomInfo[socket.roomName]["progress"] = "survey";
     }
     else if((temp + 1 + roomInfo[socket.roomName]["disagree"]) == 4){
