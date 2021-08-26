@@ -3,17 +3,19 @@ const utils = require("./utils");
 function joinResponse(roomInfo, io, socket){
     for (var i = 0; i < Object.keys(roomInfo).length; i++){
         var roomName = Object.keys(roomInfo)[i];
-        var participantList = roomInfo[roomName]["participants"];
-        if (participantList.length < 4){
-            console.log(`One person joined at ${roomName}`);
-            const playerName = utils.newPlayerName(participantList);
-            socket.join(roomName);
-            socket.roomName = roomName;
-            socket.playerName = playerName;
-            participantList.push(playerName);
-            roomInfo[roomName]["participants"] = participantList
-            socket.emit("name", playerName, roomName);
-            return;
+        if( roomInfo[roomName]["progress"] == "waiting"){
+            var participantList = roomInfo[roomName]["participants"];
+            if (participantList.length < 4){
+                console.log(`One person joined at ${roomName}`);
+                const playerName = utils.newPlayerName(participantList);
+                socket.join(roomName);
+                socket.roomName = roomName;
+                socket.playerName = playerName;
+                participantList.push(playerName);
+                roomInfo[roomName]["participants"] = participantList
+                socket.emit("name", playerName, roomName);
+                return;
+            }
         }
     }
     var newRoomName = utils.newRoomName(roomInfo);
