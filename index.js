@@ -13,19 +13,13 @@ app.use("/connection", connection);
 let roomInfo = {}
 
 io.on("connection", (socket) => {
-  // socket.on("disconnect", () => {
-  //   console.log("disconnected");
-  //   socketHelper.exitResponse(
-  //     roomInfo,
-  //     io,
-  //     socket
-  //   )
-  // })
-  socket.on("closeattempt", () => {
-    console.log("close attempt")
-  })
-  socket.on("actualdisconnect", () => {
-    console.log("actual disconnect")
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+    socketHelper.exitResponse(
+      roomInfo,
+      io,
+      socket
+    )
   })
   socket.on("newMember", () => {
     socketHelper.joinResponse(
