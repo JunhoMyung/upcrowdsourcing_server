@@ -5,7 +5,7 @@ function joinResponse(roomInfo, io, socket){
         var roomName = Object.keys(roomInfo)[i];
         if( roomInfo[roomName]["progress"] == "waiting"){
             var participantList = roomInfo[roomName]["participants"];
-            if (participantList.length < 4){
+            if (participantList.length < 6){
                 console.log(`One person joined at ${roomName}`);
                 const playerName = utils.newPlayerName(participantList);
                 socket.join(roomName);
@@ -36,8 +36,6 @@ function joinResponse(roomInfo, io, socket){
 }
 
 function exitResponse(roomInfo, io, socket){
-    console.log(socket.roomName)
-    console.log(roomInfo)
     if (socket.roomName){
         if(roomInfo[socket.roomName]){
             if (roomInfo[socket.roomName]["progress"] == "waiting"){
@@ -53,8 +51,19 @@ function exitResponse(roomInfo, io, socket){
                 }
             }
             else if (roomInfo[socket.roomName]["progress"] == "task"){
-                io.to(socket.roomName).emit("terminate");
-                delete roomInfo[socket.roomName]; 
+                if (roomInfo[socket.roomName]["participants"].length == 2){
+                    io.to(socket.roomname).emit("terminate")
+                    delete roomInfo[socket.roomName]; 
+                }
+                else {
+                    var tempList = roomInfo[socket.roomName]["participants"]
+                    const index = tempList.indexOf(socket.playerName);
+                    if (index > -1) {
+                        tempList.splice(index, 1);
+                    }
+                    roomInfo[socket.roomName]["participants"] = tempList;
+                    
+                }
             }
             else if (roomInfo[socket.roomName]["progress"] == "survey"){
                 var tempList = roomInfo[socket.roomName]["participants"]
@@ -77,7 +86,7 @@ function acceptResponse(roomInfo, io, socket) {
         var temp = roomInfo[socket.roomName]["accept"];
         roomInfo[socket.roomName]["accept"] = temp + 1;
         io.to(socket.roomName).emit("accept", temp+1);
-        if ((temp + 1) == 4){
+        if ((temp + 1) == 6){
             io.to(socket.roomName).emit("allAccept");
             roomInfo[socket.roomName]["progress"] = "task";
         }
@@ -89,7 +98,7 @@ function readyResponse(roomInfo, io, socket) {
             var temp = roomInfo[socket.roomName]["ready"];
             roomInfo[socket.roomName]["ready"] = temp + 1;
             socket.ready = true;
-            if ((temp + 1) == 4){
+            if ((temp + 1) == 6){
                 io.to(socket.roomName).emit("full");
             }
             io.to(socket.roomName).emit("newMember", temp+1);
@@ -100,7 +109,7 @@ function creative_instruction(roomInfo, io, socket) {
     if(roomInfo[socket.roomName]){
         var temp = roomInfo[socket.roomName]["creative_instruction"];
         roomInfo[socket.roomName]["creative_instruction"] = temp + 1;
-        if ((temp + 1) == 4){
+        if ((temp + 1) == 6){
             io.to(socket.roomName).emit("Creative-Instruction-Done");
         }
         io.to(socket.roomName).emit("Creative-Instruction", temp+1); 

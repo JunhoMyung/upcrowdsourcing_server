@@ -11,7 +11,7 @@ function newRoomName(roomInfo) {
 }
 
 function newPlayerName(participantList) {
-    const nameList = ["Puppy", "Kitty", "Bunny", "Squirrel"];
+    const nameList = ["Puppy", "Kitty", "Bunny", "Squirrel", "Bear", "Tiger"];
     for (var i = 0; i < nameList.length; i++){
         if (!participantList.includes(nameList[i])){
             return nameList[i];
