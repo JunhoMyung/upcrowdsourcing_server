@@ -36,7 +36,7 @@ function joinResponse(roomInfo, io, socket){
 }
 
 function exitResponse(roomInfo, io, socket){
-    console.log(socket.roomName["participants"])
+    console.log(roomInfo[socket.roomName]["participants"])
     if (socket.roomName){
         if(roomInfo[socket.roomName]){
             if (roomInfo[socket.roomName]["progress"] == "waiting"){
