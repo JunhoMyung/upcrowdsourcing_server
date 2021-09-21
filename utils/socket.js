@@ -99,7 +99,7 @@ function readyResponse(roomInfo, io, socket) {
             var temp = roomInfo[socket.roomName]["ready"];
             roomInfo[socket.roomName]["ready"] = temp + 1;
             socket.ready = true;
-            if ((temp + 1) == roomInfo[socket.roomName]["participants"].length){
+            if ((temp + 1) == 6){
                 io.to(socket.roomName).emit("full");
             }
             io.to(socket.roomName).emit("newMember", temp+1);
@@ -110,7 +110,7 @@ function creative_instruction(roomInfo, io, socket) {
     if(roomInfo[socket.roomName]){
         var temp = roomInfo[socket.roomName]["creative_instruction"];
         roomInfo[socket.roomName]["creative_instruction"] = temp + 1;
-        if ((temp + 1) == 6){
+        if ((temp + 1) == roomInfo[socket.roomName]["participants"].length){
             io.to(socket.roomName).emit("Creative-Instruction-Done");
         }
         io.to(socket.roomName).emit("Creative-Instruction", temp+1); 
