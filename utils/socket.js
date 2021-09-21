@@ -62,7 +62,7 @@ function exitResponse(roomInfo, io, socket){
                         tempList.splice(index, 1);
                     }
                     roomInfo[socket.roomName]["participants"] = tempList;
-                    
+                    io.to(socket.roomName).emit("currentMember", tempList)
                 }
             }
             else if (roomInfo[socket.roomName]["progress"] == "survey"){
@@ -98,7 +98,7 @@ function readyResponse(roomInfo, io, socket) {
             var temp = roomInfo[socket.roomName]["ready"];
             roomInfo[socket.roomName]["ready"] = temp + 1;
             socket.ready = true;
-            if ((temp + 1) == 6){
+            if ((temp + 1) == roomInfo[socket.roomName]["participants"].length){
                 io.to(socket.roomName).emit("full");
             }
             io.to(socket.roomName).emit("newMember", temp+1);
