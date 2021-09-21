@@ -91,11 +91,11 @@ io.on("connection", (socket) => {
     if (roomInfo[socket.roomName]["agree"]){
       const temp = roomInfo[socket.roomName]["agree"]
       roomInfo[socket.roomName]["agree"] = temp + 1
-      if (temp + 1 == 3) {
+      if ((temp + 1) >= (roomInfo[socket.roomName]["participants"].length / 2)) {
         io.to(socket.roomName).emit("finish", roomInfo[socket.roomName]["title"], roomInfo[socket.roomName]["description"])
         roomInfo[socket.roomName]["progress"] = "survey";
       }
-      else if((temp + 1 + roomInfo[socket.roomName]["disagree"]) == 4){
+      else if((temp + 1 + roomInfo[socket.roomName]["disagree"]) == roomInfo[socket.roomName]["participants"].length){
         io.to(socket.roomName).emit("nonagreement")
       }
     }
@@ -108,10 +108,10 @@ io.on("connection", (socket) => {
     io.to(socket.roomName).emit("disagree", player)
     const temp = roomInfo[socket.roomName]["disagree"]
     roomInfo[socket.roomName]["disagree"] = temp + 1
-    if (temp + 1 == 2) {
+    if (temp + 1 > (roomInfo[socket.roomName]["participants"].length / 2)) {
       io.to(socket.roomName).emit("nonagreement")
     }
-    else if((temp + 1 + roomInfo[socket.roomName]["agree"]) == 4){
+    else if((temp + 1 + roomInfo[socket.roomName]["agree"]) == roomInfo[socket.roomName]["participants"].length){
       io.to(socket.roomName).emit("nonagreement")
     }
   })
