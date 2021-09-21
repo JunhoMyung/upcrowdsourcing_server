@@ -37,7 +37,6 @@ function joinResponse(roomInfo, io, socket){
 
 function exitResponse(roomInfo, io, socket){
     if (socket.roomName){
-        console.log(roomInfo[socket.roomName]["participants"])
         if(roomInfo[socket.roomName]){
             if (roomInfo[socket.roomName]["progress"] == "waiting"){
                 var tempList = roomInfo[socket.roomName]["participants"]
@@ -53,7 +52,7 @@ function exitResponse(roomInfo, io, socket){
             }
             else if (roomInfo[socket.roomName]["progress"] == "task"){
                 if (roomInfo[socket.roomName]["participants"].length == 2){
-                    io.to(socket.roomname).emit("terminate")
+                    io.to(socket.roomName).emit("terminate")
                     delete roomInfo[socket.roomName]; 
                 }
                 else {
