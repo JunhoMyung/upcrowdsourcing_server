@@ -36,8 +36,8 @@ function joinResponse(roomInfo, io, socket){
 }
 
 function exitResponse(roomInfo, io, socket){
-    console.log(roomInfo[socket.roomName]["participants"])
     if (socket.roomName){
+        console.log(roomInfo[socket.roomName]["participants"])
         if(roomInfo[socket.roomName]){
             if (roomInfo[socket.roomName]["progress"] == "waiting"){
                 var tempList = roomInfo[socket.roomName]["participants"]
