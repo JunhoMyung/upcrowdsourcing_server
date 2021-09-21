@@ -14,6 +14,7 @@ function joinResponse(roomInfo, io, socket){
                 participantList.push(playerName);
                 roomInfo[roomName]["participants"] = participantList
                 socket.emit("name", playerName, roomName);
+                io.to(socket.roomName).emit("currentMember", participantList)
                 return;
             }
         }
